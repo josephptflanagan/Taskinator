@@ -279,12 +279,52 @@ var dragLeaveHandler = function(event){
     if(taskListEl){
         taskListEl.removeAttribute("style");
     }
-}
+};
 
 var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-}
+};
 
+var loadTasks = function(){
+
+    var tasks = localStorage.getItem("tasks")
+
+    if(!tasks){
+        tasks = [];
+        return false;
+    };
+      tasks = JSON.parse(tasks);
+
+      for(var i = 0; i < tasks.length; i++){
+        tasks[i].id = taskIdCounter;
+        var listItemEl = document.createElement("li");
+        listItemEl.className = "task-item";
+        listItemEl.setAttribute("data-task-id", tasks[i].id);
+        listItemEl.setAttribute("draggable", true);
+        var taskInfoEl = document.createElement('div');
+        taskInfoEl.className="task-info"
+        taskInfoEl.innerHTML = "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
+        listItemEl.appendChild(taskInfoEl);
+        var taskActionsEl = createTaskActions(tasks[i].id);
+        listItemEl.appendChild(taskActionsEl);
+        if(tasks[i].status === "to do"){
+            tasksToDoEl.appendChild(listItemEl);
+        }
+        else if(tasks[i].status === "in progress"){
+            tasksInProgressEl.appendChild(listItemEl);
+        }
+        else if(tasks[i].status === "completed"){
+            tasksCompletedEl.appendChild(listItemEl);
+        }
+
+        taskIdCounter++;
+
+        };
+
+};
+
+loadTasks();
+saveTasks();
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
