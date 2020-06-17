@@ -283,6 +283,7 @@ var dragLeaveHandler = function(event){
 
 var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
+    console.trace(tasks);
 };
 
 var loadTasks = function(){
@@ -291,6 +292,7 @@ var loadTasks = function(){
 
     if(!tasks){
         tasks = [];
+        console.log("deleting tasks");
         return false;
     };
       tasks = JSON.parse(tasks);
@@ -324,7 +326,6 @@ var loadTasks = function(){
 };
 
 loadTasks();
-saveTasks();
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
